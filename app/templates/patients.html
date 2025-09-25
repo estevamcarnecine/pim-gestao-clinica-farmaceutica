@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Patients List</h2>
+<ul>
+    {% for patient in patients %}
+        <li>{{ patient.name }} (ID: {{ patient.id }})</li>
+    {% endfor %}
+</ul>
+{% endblock %}
