@@ -1,24 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Update Patient</title>
-</head>
-<body>
-    <h1>Update Patient</h1>
+{% extends "base.html" %}
 
-    <form method="POST">
-        <label>Name:</label>
-        <input type="text" name="name" value="{{ patient.name }}" required><br>
+{% block title %}Edit Patient{% endblock %}
 
-        <label>Age:</label>
-        <input type="number" name="age" value="{{ patient.age }}" required><br>
+{% block content %}
+<div class="card">
+    <div class="card-header bg-warning">
+        <h4 class="mb-0">Edit Patient</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('main.update_patient', patient_id=patient.id) }}">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" id="name" name="name" value="{{ patient.name }}" class="form-control" required>
+            </div>
 
-        <label>Condition:</label>
-        <input type="text" name="condition" value="{{ patient.condition }}"><br>
+            <div class="mb-3">
+                <label for="birth_date" class="form-label">Birth Date</label>
+                <input type="date" id="birth_date" name="birth_date"
+                       value="{{ patient.birth_date.strftime('%Y-%m-%d') if patient.birth_date else '' }}"
+                       class="form-control">
+            </div>
 
-        <button type="submit">Update</button>
-    </form>
-
-    <a href="{{ url_for('patients.list_patients') }}">Back</a>
-</body>
-</html>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{{ url_for('main.list_patients') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

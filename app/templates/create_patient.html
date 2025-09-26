@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Add Patient{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Add Patient</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('main.create_patient') }}">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="birth_date" class="form-label">Birth Date</label>
+                <input type="date" id="birth_date" name="birth_date" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="{{ url_for('main.list_patients') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
