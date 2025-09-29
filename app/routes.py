@@ -1,61 +1,53 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models import db, Patient
+from flask_login import login_required
+from .models import db, Patient
 
 patients_bp = Blueprint('patients', __name__)
 
-# ---------------- Home / Index ----------------
-@patients_bp.route('/')
-def index():
-    return redirect(url_for('patients.list_patients'))
-
-# ---------------- List Patients ----------------
 @patients_bp.route('/patients')
+@login_required
 def list_patients():
     patients = Patient.query.all()
     return render_template('patients.html', patients=patients)
 
-# ---------------- Create Patient ----------------
-@patients_bp.route('/patients/create', methods=['GET', 'POST'])
-def create_patient():
+@patients_bp.route('/patients/add', methods=['GET', 'POST'])
+@login_required
+def add_patient():
     if request.method == 'POST':
         name = request.form['name']
-        birth_date = request.form.get('birth_date')
-        if not name:
-            flash("Name is required!", "error")
-            return redirect(url_for('patients.create_patient'))
+        age = request.form['age']
+        condition = request.form['condition']
 
-        new_patient = Patient(name=name, birth_date=birth_date)
+        new_patient = Patient(name=name, age=age, condition=condition)
         db.session.add(new_patient)
         db.session.commit()
-        flash("Patient created successfully!", "success")
+
+        flash('Patient added successfully!', 'success')
         return redirect(url_for('patients.list_patients'))
 
-    return render_template('create_patient.html')
+    return render_template('add_patient.html')
 
-# ---------------- Update Patient ----------------
-@patients_bp.route('/patients/update/<int:patient_id>', methods=['GET', 'POST'])
-def update_patient(patient_id):
-    patient = Patient.query.get_or_404(patient_id)
+@patients_bp.route('/patients/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_patient(id):
+    patient = Patient.query.get_or_404(id)
 
     if request.method == 'POST':
         patient.name = request.form['name']
-        patient.birth_date = request.form.get('birth_date')
+        patient.age = request.form['age']
+        patient.condition = request.form['condition']
+
         db.session.commit()
-        flash("Patient updated successfully!", "success")
+        flash('Patient updated successfully!', 'success')
         return redirect(url_for('patients.list_patients'))
 
-    return render_template('update_patient.html', patient=patient)
+    return render_template('edit_patient.html', patient=patient)
 
-# ---------------- Delete Patient ----------------
-@patients_bp.route('/patients/delete/<int:patient_id>', methods=['GET', 'POST'])
-def delete_patient(patient_id):
-    patient = Patient.query.get_or_404(patient_id)
-
-    if request.method == 'POST':
-        db.session.delete(patient)
-        db.session.commit()
-        flash("Patient deleted successfully!", "success")
-        return redirect(url_for('patients.list_patients'))
-
-    # GET request mostra a página de confirmação
-    return render_template('delete_patient.html', patient=patient)
+@patients_bp.route('/patients/<int:id>/delete', methods=['POST'])
+@login_required
+def delete_patient(id):
+    patient = Patient.query.get_or_404(id)
+    db.session.delete(patient)
+    db.session.commit()
+    flash('Patient deleted successfully!', 'info')
+    return redirect(url_for('patients.list_patients'))
