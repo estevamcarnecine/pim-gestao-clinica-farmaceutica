@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Edit Patient</h2>
+
+<form method="POST">
+    <label for="name">Name:</label>
+    <input type="text" name="name" value="{{ patient.name }}" required><br>
+
+    <label for="age">Age:</label>
+    <input type="number" name="age" value="{{ patient.age }}" required><br>
+
+    <label for="diagnosis">Diagnosis:</label>
+    <input type="text" name="diagnosis" value="{{ patient.diagnosis }}"><br>
+
+    <button type="submit">Update Patient</button>
+</form>
+
+<a href="{{ url_for('main.patients') }}">Back to Patient List</a>
+{% endblock %}
