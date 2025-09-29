@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>
+    {% if patient %}
+        Edit Patient
+    {% else %}
+        Add New Patient
+    {% endif %}
+</h2>
+
+<form method="POST">
+    <label for="name">Name:</label>
+    <input type="text" name="name" value="{{ patient.name if patient else '' }}" required>
+    <br><br>
+
+    <label for="birth_date">Birth Date:</label>
+    <input type="date" name="birth_date" value="{{ patient.birth_date if patient and patient.birth_date else '' }}">
+    <br><br>
+
+    <button type="submit">
+        {% if patient %}
+            Update
+        {% else %}
+            Create
+        {% endif %}
+    </button>
+</form>
+
+<a href="{{ url_for('main.list_patients') }}">Back to Patients</a>
+{% endblock %}
