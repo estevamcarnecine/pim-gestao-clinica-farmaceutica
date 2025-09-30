@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Estudos Clínicos</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Título</th><th>Início</th><th>Fim</th></tr></thead>
+    <tbody>
+      {% for s in studies %}
+      <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.title }}</td>
+        <td>{{ s.start_date }}</td>
+        <td>{{ s.end_date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

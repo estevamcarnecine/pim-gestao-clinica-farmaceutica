@@ -1,28 +1,38 @@
+# app/__init__.py
+# Cria e configura a aplicação Flask, inicializa DB.
+# MODIF: refeito/atualizado para incluir SQLAlchemy, configuração e criação automática do DB.
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+import os
 
-# Initialize the database
 db = SQLAlchemy()
 
 def create_app():
-    """
-    Factory function to create and configure the Flask app
-    """
-    app = Flask(__name__)
+    """Cria a aplicação Flask e inicializa extensões.
 
-    # Database configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'  # SQLite database file
+    Comentários para estudo:
+    - Usamos create_app para facilitar testes e deploy.
+    - db.init_app associa a instância do SQLAlchemy à app.
+    """
+    load_dotenv()  # carrega .env se existir
+    app = Flask(__name__, template_folder="templates", static_folder="static")
+
+    # Configurações mínimas
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')  # MODIF: adicionado
+    # Usa SQLite local para facilidade (arquivo db.sqlite na raiz)
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///../db.sqlite')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # Initialize the database with the app
     db.init_app(app)
 
-    # Import Blueprints
-    from app.routes import patients_bp  # <-- Blueprint for patient routes
+    # Importa modelos e rotas aqui para evitar import circular
+    with app.app_context():
+        from . import models  # MODIF: garantir que modelos sejam carregados
+        db.create_all()  # Cria tabelas automaticamente no primeiro run (simplicidade para MVP). MODIF: adicionado
 
-    # Register Blueprints
-    app.register_blueprint(patients_bp)  # <-- Register the blueprint with the app
-
-    # You can add more Blueprints here in the future (e.g., auth, admin)
+    from .routes import main_bp
+    app.register_blueprint(main_bp)
 
     return app

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Bem-vindo</h2>
+  <p>Este é um MVP funcional. Use as rotas /api/* para criar e listar registros (ex: POST /api/studies).</p>
+  <p>Exemplo de uso rápido com curl (terminal):</p>
+  <pre>
+curl -X POST -H "Content-Type: application/json" -d '{"name":"João","email":"j@x.com","password":"1234"}' http://127.0.0.1:5000/api/users
+  </pre>
+{% endblock %}

@@ -1,1 +1,7 @@
-Single-database configuration for Flask.
+# PIM - Gestão Clínica e Produção Farmacêutica (MVP)
+
+Resumo: MVP para cadastro de usuários, estudos clínicos e produtos farmacêuticos. Simples, focado em funcionalidade.
+
+## Instalação (local)
+
+1. Clone:
