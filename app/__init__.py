@@ -1,21 +1,14 @@
-# app/__init__.py
-# Cria e configura a aplicação Flask, inicializa DB.
-# MODIF: refeito/atualizado para incluir SQLAlchemy, configuração e criação automática do DB.
-
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from dotenv import load_dotenv
-import os
 
 db = SQLAlchemy()
 
 def create_app():
-    """Cria a aplicação Flask e inicializa extensões.
 
-    Comentários para estudo:
-    - Usamos create_app para facilitar testes e deploy.
-    - db.init_app associa a instância do SQLAlchemy à app.
-    """
+
     load_dotenv()  # carrega .env se existir
     app = Flask(__name__, template_folder="templates", static_folder="static")
 
